@@ -2,8 +2,6 @@ import cv2
 import sys
 
 if __name__ == '__main__':
-    n = int(input())
-    path = input()
     cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
     count = 0
     if len(sys.argv) < 3 or len(sys.argv) >= 4:
