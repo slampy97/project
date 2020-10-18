@@ -1,8 +1,12 @@
 import cv2
-
+import argparse
+parser = argparse.ArgumentParser(description='Videos to frames')
+parser.add_argument('fr_number', type=int, help='Input number of frames')
+parser.add_argument('outdir', type=str, help='Output dir for image')
+args = parser.parse_args()
 if __name__ == '__main__':
-    n = int(input())
-    path = input()
+    n = args.fr_number
+    path = args.outdir
     cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
     count = 0
     while (cap.isOpened()):
@@ -25,6 +29,5 @@ if __name__ == '__main__':
             break
     cap.release()
     cv2.destroyAllWindows()
-
 
 
