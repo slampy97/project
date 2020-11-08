@@ -1,20 +1,35 @@
 import cv2
 import argparse
+import logging
 
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+
+logger_handler = logging.FileHandler('python_logging.log')
+logger_handler.setLevel(logging.INFO)
 
 def argparse_part():
     parser = argparse.ArgumentParser(description='Videos to frames')
+    parser.add_argument('video_path', type =str, help="input path of video file")
+    logger.info('Добавлен аргумент путь в видеофайлу')
     parser.add_argument('fr_number', type=int, help='Input number of frames')
+    logger.info('Добавлен аргумент количество кадров')
     parser.add_argument('outdir', type=str, help='Output dir for image')
+    logger.info('Добавлен аргумент выходной директории')
     args = parser.parse_args()
     n = args.fr_number
     path = args.outdir
-    return n, path
+    video_path = args.video_path
+    logger.info('все 3 аргумента считаны и переданы далее')
+    return video_path, n, path
 
-def video_handle(n, path):
-    cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+def video_handle(n, video_path, path):
+    logger.info('Обращение к видеофайлу')
+    cap = cv2.VideoCapture(video_path, cv2.CAP_DSHOW)
+    logger.info('Начало считывая видеофайла')
     count = 0
     while (cap.isOpened()):
+        logger.info('считывание кадра номер ' + str(count))
         count += 1
         ret, frame = cap.read()
         frame_width = int(cap.get(3))
@@ -31,13 +46,17 @@ def video_handle(n, path):
         if cv2.waitKey(25) & 0xFF == ord('q'):
             break
         if count > n:
+            logger.info('Конец считывания видеофайла')
             break
+
     cap.release()
+    logger.info('Освобождение захвата видефайла')
     cv2.destroyAllWindows()
+    logger.info('Освобождение всех прочих ресурсов')
 
 def main():
-    n, path = argparse_part()
-    video_handle(n, path)
+    video_path, n, path = argparse_part()
+    video_handle(n, video_path, path)
 
 main()
 
